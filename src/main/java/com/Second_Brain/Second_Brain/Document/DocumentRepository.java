@@ -11,4 +11,6 @@ public interface DocumentRepository
     List<Document> findByWorkspaceIdOrderByCreatedAtDesc(
             UUID workspaceId
     );
+
+    boolean existsByWorkspaceIdAndStatus(UUID workspaceId, Document.Status status);
 }

@@ -73,7 +73,7 @@ public class LocalFileStorageService implements FileStorageService {
     }
 
     @Override
-    public void delete(String storagePath) throws IOException {
+    public Path resolve(String storagePath) {
 
         Path target = storageRoot
                 .resolve(storagePath)
@@ -83,6 +83,11 @@ public class LocalFileStorageService implements FileStorageService {
             throw new SecurityException("Invalid storage path");
         }
 
-        Files.deleteIfExists(target);
+        return target;
+    }
+
+    @Override
+    public void delete(String storagePath) throws IOException {
+        Files.deleteIfExists(resolve(storagePath));
     }
 }

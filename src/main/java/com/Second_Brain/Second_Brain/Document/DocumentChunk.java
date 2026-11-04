@@ -1,6 +1,9 @@
 package com.Second_Brain.Second_Brain.Document;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.Array;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -32,17 +35,15 @@ public class DocumentChunk {
     private String content;
 
     /*
-     * The embedding is stored in PostgreSQL using pgvector.
-     *
-     * We are not mapping it to a Java vector type yet.
-     * Spring AI will handle vector storage when we implement
-     * the embedding/vector-store layer.
+     * pgvector column, mapped by the hibernate-vector module, which also
+     * provides HQL functions such as cosine_distance(). The length must
+     * match the embedding model (nomic-embed-text gives 768 dimensions)
+     * and the vector(768) column in V3__document_chunks.sql.
      */
-    @Column(
-            name = "embedding",
-            columnDefinition = "vector(768)"
-    )
-    private String embedding;
+    @JdbcTypeCode(SqlTypes.VECTOR)
+    @Array(length = 768)
+    @Column(name = "embedding")
+    private float[] embedding;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
@@ -84,11 +85,11 @@ public class DocumentChunk {
         this.content = content;
     }
 
-    public String getEmbedding() {
+    public float[] getEmbedding() {
         return embedding;
     }
 
-    public void setEmbedding(String embedding) {
+    public void setEmbedding(float[] embedding) {
         this.embedding = embedding;
     }
 

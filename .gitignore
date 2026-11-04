@@ -4,3 +4,7 @@ target/
 .idea/
 .vscode/
 *.log
+
+# Uploaded documents (app.storage.root). The leading slash matters: plain
+# "storage/" would also ignore src/**/Document/storage/ source folders.
+/storage/

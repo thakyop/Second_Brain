@@ -13,6 +13,10 @@ public class EmbeddingService {
     }
 
     public float[] embed(String text) {
-        return embeddingModel.embed(text);
+        float[] vector = embeddingModel.embed(text);
+        if (vector == null || vector.length != 768) {
+            throw new IllegalStateException("Embedding vector must have 768 dimensions, got " + (vector == null ? "null" : vector.length));
+        }
+        return vector;
     }
 }
